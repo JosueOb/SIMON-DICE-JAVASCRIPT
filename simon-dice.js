@@ -14,6 +14,7 @@ class Juego{
     constructor(){
         this.inicializar()
         this.generarSecuencia()
+        this.siguienteNivel()
     }
     // Métodos
     inicializar(){
@@ -39,6 +40,48 @@ class Juego{
         // fill ya que al utilizar la función map en este array, no funcionará debido el array no tiene elementos definidos y con
         // un valor. Para redondear un valor para bajo, se utiliza Math.floor
         this.secuencia = new Array(10).fill(0).map(n => Math.floor(Math.random() * 4))
+    }
+    siguienteNivel(){
+        this.iluminarSecuencia()
+    }
+    transformarNumeroAColor(numero){
+        switch(numero){
+            case 0:
+                return 'celeste'//no se pone break, ya que el break no se podra ejecutar si se tiene un return
+            case 1:
+                return 'violeta'
+            case 2:
+                return 'naranja'
+            case 3:
+                return 'verde'
+        }
+    }
+    iluminarSecuencia(){
+        // se obtiene el color a iluminar
+        // dentro de los ciclos for es recomendable utilizar let, en vez de var
+        for(let i = 0; i < this.nivel; i++){
+            // al declarar la variable color con var, se va a estar pisando el último valor (color de la secuencia )en cada ciclo for.
+            // por lo cual se cambia, de var a let, permitiendo que la variable color se mantenga en cada uno de los ciclos for.
+            // let color = this.transformarNumeroAColor(this.secuencia[i])
+            // Si en el variable ( color) no se tiene una reasignacion de valor, es decir color = ..., 
+            // para evitar bugs, lo recomendable es utilizar const
+            const color = this.transformarNumeroAColor(this.secuencia[i])
+            // console.log(color)
+            setTimeout(() => {
+                // console.log(color)
+                this.iluminarColor(color)
+            }, 1000 * i)//de esta manera se ilumina el color despues de un tiempo, ya que en el for los colores se iluminarian inmediatamente
+        }
+    }
+    iluminarColor(color){
+        // el color que recibe la función, se procede al boton con su respectivo color
+        // se le agrega una clase CSS
+        this.colores[color].classList.add('light')//al boton con el color respectivo, se le agrega una clase CSS
+        setTimeout(() => this.apagarColor(color), 350)
+    }
+    apagarColor(color){
+        // se remueve la clase light del respectivo color que recibe esta función
+        this.colores[color].classList.remove('light')
     }
 }
 
