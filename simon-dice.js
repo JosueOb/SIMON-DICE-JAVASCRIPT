@@ -18,6 +18,9 @@ class Juego{
     }
     // Métodos
     inicializar(){
+        //cada vez que se utilice elegirJuego, va estar atado al this del juego
+        // de este modo this es el juego y no cada uno de los botones dentro de la elegirColor()
+        this.elegirColor = this.elegirColor.bind(this)
         // se oculta el boton de empezar
         // classList, agrega a las clasess CSS del btnEmpezar
         // una nueva clase CSS
@@ -43,6 +46,7 @@ class Juego{
     }
     siguienteNivel(){
         this.iluminarSecuencia()
+        this.agregarEventosClick()
     }
     transformarNumeroAColor(numero){
         switch(numero){
@@ -83,7 +87,31 @@ class Juego{
         // se remueve la clase light del respectivo color que recibe esta función
         this.colores[color].classList.remove('light')
     }
+    agregarEventosClick(){
+        // lo que realiza es este metodo es agregar a cada color el evento click, y decirle al navegador
+        // que función debe ejecutar una vez que se realice ese evento click, esta función se ejecuta asincronamente
+        // Para agregar un manejador de un evento se utiliza addEventListener que recibe el evento y la función que se debe ejecutar
+        var _this = this
+        var self = this//para no perder la referencia de quien es this
+        // this.colores.celeste.addEventListener('click', this.elegirColor.bind(self))//para evitar utilizar bind en este método y especificar que elegirJuego
+        // este atado a this (de la clase juego) se lo especifica en inicializar()
+        this.colores.celeste.addEventListener('click', this.elegirColor)
+        this.colores.violeta.addEventListener('click', this.elegirColor)
+        this.colores.naranja.addEventListener('click', this.elegirColor)
+        this.colores.verde.addEventListener('click', this.elegirColor)
+    }
+    // cuando se agregan manejadores de eventos o escuchadores de evento
+    // los métodos que se llaman, se llaman con un parametro que es ev
+    elegirColor(ev){
+        // console.log(ev)
+        // JavaScript va a perder el contexto cuando se llame a elegirColor
+        // Es muy importante de recordar quien es el this, dentro de cada una de las funciones
+        console.log(this)//this en este caso es el botón al que se esta llamando, this dentro dentro de ese método
+        // pero si de desea que this siga siendo un objeto juego, para ello se debe cambiar quien es this, utilizando
+        // baind (enlazar), especificando quien es this.
+    }
 }
+
 
 function empezarJuego(){
     // alert("El juego va a comenzar")
