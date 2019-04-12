@@ -7,12 +7,13 @@ const celeste = document.getElementById('celeste')
 const violeta = document.getElementById('violeta')
 const naranja = document.getElementById('naranja')
 const verde = document.getElementById('verde')
-const ULTIMO_NIVEL = 10
-
+const ULTIMO_NIVEL = 5
+// swal('hello')
 // La clase juego tendrá toda la lógia del juego
 class Juego{
 
     constructor(){
+        this.inicializar = this.inicializar.bind(this)
         this.inicializar()
         this.generarSecuencia()
         setTimeout(this.siguienteNivel, 500)
@@ -26,7 +27,8 @@ class Juego{
         // se oculta el boton de empezar
         // classList, agrega a las clasess CSS del btnEmpezar
         // una nueva clase CSS
-        btnEmpezar.classList.add('hide')
+        this.toggleBtnEmpezar()//un interruptor de encendido a apagado
+
         this.nivel = 1
         this.colores = {
             // en el caso de asignar a un atributo el valor que se tiene en una variable
@@ -35,6 +37,15 @@ class Juego{
             violeta, //es lo mismo que celeste: celestes (referente al boton)
             naranja,
             verde
+        }
+    }
+    toggleBtnEmpezar(){
+        // se verifica si el boton tiene la clase hide, en caso de que no, se le agrega, caso contrario
+        // se la elimina
+        if(btnEmpezar.classList.contains('hide')){
+            btnEmpezar.classList.remove('hide')
+        }else{
+            btnEmpezar.classList.add('hide')
         }
     }
     generarSecuencia(){
@@ -147,6 +158,7 @@ class Juego{
                 this.eliminarEventosClick()
                 if(this.nivel === (ULTIMO_NIVEL + 1)){
                     // ganó
+                    this.ganoElJuego()
                 }else{
                     // setTimeout(this.siguienteNivel.bind(this), 2000)//se utiliza una referencia a la función y el tiempo
                     // en este caso this es window, ya que setTimeOut delega en el navegador la ejecución de la función
@@ -157,8 +169,24 @@ class Juego{
             }
         }else{
             // perdió
+            this.perdioElJuego()
         }
 
+    }
+    ganoElJuego(){
+        // swal devuelve una promesa
+        swal("Simón Dice", "Felicitaciones Ganastes el Juego", "success")
+        // .then(() =>this.inicializar())
+        .then(this.inicializar)
+    }
+    perdioElJuego(){
+        // swal devuelve una promesa
+        swal("Simón Dice", "Lo lamento, perdistes :(", "error")
+        // .then(() =>this.inicializar())
+        .then(() =>{
+            this.eliminarEventosClick()
+            this.inicializar()
+        })
     }
 }
 
